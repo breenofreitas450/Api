@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+
+    <nav class="navbar navbar-dark bg-dark">
+        <br>
+    </nav>
+    <div class="container" id="form">
+        <div class="card text-white bg-dark mb-3">
+            <div class="card-header">
+                <h3>FOrmulario</h3>
+            </div>
+            <div class="card-body">
+                <label class="card-title">Nome:</label>
+                <input id="nome" name="nome" class="form-control" type ="Name" placeholder="Nome">
+                <br>
+                <label class="card-title">Sobrenome:</label>
+                <input id="sobrenome" name="sobrenome" class="form-control" type ="Last Name" placeholder="Sobrenome">
+                <br>
+                <label class="card-title">Email:</label>
+                <input id="email" name="email" class="form-control" type="email" placeholder="Email">
+                <br>
+                <button class="btn btn-success" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm" onclick="btn();">Enviar</button>
+            </div>
+        </div>
+        <div class="card text-dark bg-white mb-3">
+            <div class="card-header">
+                <h3>Resultado:</h3>
+            </div>
+            <div class="card-body">
+                <label class="card-title">Animal:</label>
+                <span id="animal"></span>
+            </div>
+            <div class="card-body">
+                <label class="card-title">Cor:</label>
+                <span id="cor"></span>
+            </div>
+            <div class="card-body">
+                <label class="card-title">Pais:</label>
+                <span id="pais"></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    function btn(){
+        if( $('#nome').val() =='' && $('#sobrenome').val() =='' && $('#email').val() ==''){           
+            alert('Campos Vazios');
+        }else{
+            var dados = {
+                     'nome': $('#nome').val(),
+                     'sobrenome': $('#sobrenome').val(),
+                    'email': $('#email').val()
+                }
+            $.ajax({
+                type: 'POST',
+                data: dados,
+                url: 'http://138.68.29.250:8082/',
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                success: function(data){                
+            }, 
+                error: function(error){
+                    var dado = {
+                                    'dado': error.responseText,
+                                    'nome': $('#nome').val(),
+                                    'sobrenome': $('#sobrenome').val(),
+                                    'email': $('#email').val()
+                               }
+                    $.ajax({
+                        type: 'POST',
+                        data: dado,
+                        url: '/Received',
+                        dataType: 'json',
+                        success: function(data){                                                        
+                            $('#animal').text(data.animal)
+                            $('#pais').text(data.pais)
+                            $('#cor').text(data.cor)
+                        }, 
+                        error: function(error){console.log(error)}
+                    }); 
+                }
+            });
+        }
+    } 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+<script src="/js/bootstrap.min.js"></script>
+</html>
+
+
